@@ -12,45 +12,37 @@ import javax.imageio.ImageIO;
  *
  * @author drayo
  */
-public class Hare extends Thread implements Animal {
-    private ArrayList<BufferedImage> sprites;
-    private int speed;
-    private boolean sleep;
+public class Hare extends Animal {
+    
     
     public Hare(int speed){
-        this.speed=speed;
-        this.sleep=false;
+        super(speed);
     }
-    @Override
-    public void setSpeed(int speed){
-        this.speed=speed;
-    
-    }
-    public int getSpeed(){
-        return speed;
-    }
-    public void Spriteloader(int numberSprites) throws IOException{
-        sprites=new ArrayList<>();
-        for(int i=1; i<=numberSprites;i++){
-           String path="/images/hare/sprite"+i+".png";
-           loadSprite(path);
-        }
-        
-    }
-
-  private void loadSprite(String path) throws IOException {
-    try {
-        
-        BufferedImage img = ImageIO.read(getClass().getResource(path));
-        sprites.add(img);
-        //System.out.println("Everything oK");
-    } catch (IOException  | IllegalArgumentException e ) {
-        System.err.println("Error loading sprite " + path);
-    }
-}
-  public ArrayList<BufferedImage> getImageBuffer(){
-      return sprites;
-  }
   
     
+    public void Spriteloader(int numberSprites) throws IOException{
+       
+        loadSprites(numberSprites,"/images/hare/sprite");
+    }
+
+    @Override
+    public void run() {
+        try{
+            while(running){
+                if(Math.random()<0.50){
+                    System.out.print("Hare sleeping");
+                    Thread.sleep(1000);
+                }
+                canvas.updateHarePosition();
+                Thread.sleep(100);
+            }
+        }catch(InterruptedException e){
+             System.out.println("todo bien");
+        }
+    }
+    
+    
+
+ 
+ 
 }

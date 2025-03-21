@@ -8,13 +8,42 @@ package liebreytortuga;
  *
  * @author drayo
  */
-public class Turtle implements Animal {
-    private int speed;
-    public Turtle(){}
-
-    @Override
-    public void setSpeed(int speed) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.util.ArrayList;
+/*import java.util.Vector;*/
+import javax.imageio.ImageIO;
+/**
+ *
+ * @author drayo
+ */
+public class Turtle extends Animal {
+  
+    
+    public Turtle(int speed){
+        
+        super(speed);
     }
+  
+    
+    public void Spriteloader(int numberSprites) throws IOException{
+        loadSprites(numberSprites,"/images/turtle/sprite");
+    }
+    
+    @Override
+    public void run(){
+        try{
+            while(running){
+                canvas.updateTurtlePosition();
+                Thread.sleep(150);
+            }
+        }catch(InterruptedException e){
+            System.out.println("turtle Thread has been Interrupted");
+        
+        }
+    }
+    
+
+ 
     
 }

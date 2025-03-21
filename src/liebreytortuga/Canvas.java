@@ -18,50 +18,56 @@ public class Canvas extends JPanel {
     private Image image;
     private Hare hare ;
     private int hareX=0;
-    private int hareY=500;
-    private int currentSpriteIndex=0;
+    private int hareY=380;
+    private Turtle turtle;
+    private int currentSpriteIndexHare=0;
+    private int currentSpriteIndexTurtle=0;
+    private int turtleX=0;
+    private int turtleY=450;
     public Canvas(String imagePath){
     this.image=new ImageIcon(getClass().getResource(imagePath)).getImage();
-    
-  
+    this.turtle=new Turtle(2);
     this.hare=new Hare(5);
     
     //loadSprites
     try{
      hare.Spriteloader(12);
+     turtle.Spriteloader(11);
     }
     catch(IOException e){
         Logger.getLogger(Canvas.class.getName()).log(Level.SEVERE,null,e);
     }
     
-    startAnimation();
-    
+     startRace();
+     
     
 
     }
     
-    
-   private void startAnimation(){
-    Timer timer=new Timer(100,e->{
-       moveHare();//upate here is position
-       repaint(); //Redraw the Canvas
-    });
-    timer.start();
-  
+    public void startRace(){
+        hare.setCanvas(this);
+        turtle.setCanvas(this);
+        hare.start();
+        turtle.start();
+        
     }
-   
-   
-   private void moveHare(){
-       //this move hare to the right
-       hareX+=hare.getSpeed();
-       //sprites
-       currentSpriteIndex=(currentSpriteIndex+1)%hare.getImageBuffer().size();
-   
-   }
-    @Override 
+    
+
+
+        
+    public synchronized void updateHarePosition(){
+     hareX+= hare.getSpeed();
+     currentSpriteIndexHare=(currentSpriteIndexHare+1)%hare.getImageBuffer().size();
+     repaint();
+    }
+     public synchronized void updateTurtlePosition(){
+     turtleX+= turtle.getSpeed();
+     currentSpriteIndexTurtle=(currentSpriteIndexTurtle+1)%turtle.getImageBuffer().size();
+     repaint();
+    }
     
     
-    
+    @Override
     protected void paintComponent(Graphics g){
     
     super.paintComponent(g);
@@ -71,10 +77,18 @@ public class Canvas extends JPanel {
     
     //draw hare
     if(!hare.getImageBuffer().isEmpty()){
-        BufferedImage currentSprite=hare.getImageBuffer().get(currentSpriteIndex);
-        g.drawImage(currentSprite,hareX,hareY,this);
+        BufferedImage currentSpriteHare=hare.getImageBuffer().get(currentSpriteIndexHare);
+        g.drawImage(currentSpriteHare,hareX,hareY,this);
     
     }
+    
+   
+    if(!turtle.getImageBuffer().isEmpty()){
+        BufferedImage currentSpriteTurtle=turtle.getImageBuffer().get(currentSpriteIndexTurtle);
+        g.drawImage(currentSpriteTurtle,turtleX,turtleY,this);
+    
+    }
+
        
     
     
